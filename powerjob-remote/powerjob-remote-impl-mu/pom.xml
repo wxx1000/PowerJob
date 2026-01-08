@@ -5,21 +5,21 @@
     <parent>
         <artifactId>powerjob-remote</artifactId>
         <groupId>tech.powerjob</groupId>
-        <version>5.1.2</version>
+        <version>5.2.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>powerjob-remote-impl-mu</artifactId>
     <name>powerjob-remote-impl-mu</name>
-    <version>5.1.2</version>
+    <version>5.2.0</version>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <netty.version>4.1.104.Final</netty.version>
-        <powerjob-remote-framework.version>5.1.2</powerjob-remote-framework.version>
+        <netty.version>4.2.9.Final</netty.version>
+        <powerjob-remote-framework.version>5.2.0</powerjob-remote-framework.version>
     </properties>
 
     <dependencies>

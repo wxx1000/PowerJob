@@ -5,28 +5,27 @@
     <parent>
         <artifactId>powerjob</artifactId>
         <groupId>tech.powerjob</groupId>
-        <version>5.1.2</version>
+        <version>5.2.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>powerjob-worker</artifactId>
     <name>powerjob-worker</name>
-    <version>5.1.2</version>
     <packaging>jar</packaging>
 
     <properties>
-        <spring.version>5.3.31</spring.version>
+        <spring.version>7.0.2</spring.version>
         <h2.db.version>2.2.224</h2.db.version>
         <hikaricp.version>4.0.3</hikaricp.version>
-        <junit.version>5.9.1</junit.version>
+        <junit.version>6.0.1</junit.version>
 
-        <logback.version>1.2.13</logback.version>
+         <logback.version>1.5.22</logback.version>
 
-        <powerjob-common.version>5.1.2</powerjob-common.version>
-        <powerjob-remote-framework.version>5.1.2</powerjob-remote-framework.version>
-        <powerjob-remote-impl-akka.version>5.1.2</powerjob-remote-impl-akka.version>
-        <powerjob-remote-impl-http.version>5.1.2</powerjob-remote-impl-http.version>
-        <powerjob-remote-impl-mu.version>5.1.2</powerjob-remote-impl-mu.version>
+        <powerjob-common.version>5.2.0</powerjob-common.version>
+        <powerjob-remote-framework.version>5.2.0</powerjob-remote-framework.version>
+        <powerjob-remote-impl-akka.version>5.2.0</powerjob-remote-impl-akka.version>
+        <powerjob-remote-impl-http.version>5.2.0</powerjob-remote-impl-http.version>
+        <powerjob-remote-impl-mu.version>5.2.0</powerjob-remote-impl-mu.version>
     </properties>
 
     <dependencies>

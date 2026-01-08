@@ -5,13 +5,14 @@
     <parent>
         <artifactId>powerjob</artifactId>
         <groupId>tech.powerjob</groupId>
-        <version>5.1.2</version>
+        <version>5.2.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>powerjob-server</artifactId>
     <name>powerjob-server</name>
-    <version>5.1.2</version>
+    <version>5.2.0</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -28,20 +29,20 @@
 
 
     <properties>
-        <springboot.version>2.7.18</springboot.version>
+        <springboot.version>4.0.2</springboot.version>
 
         <!-- MySQL version that corresponds to spring-boot-dependencies version. -->
-        <mysql.version>8.0.33</mysql.version>
+        <mysql.version>9.5.0</mysql.version>
         <ojdbc.version>19.7.0.0</ojdbc.version>
-        <mssql-jdbc.version>7.4.1.jre8</mssql-jdbc.version>
+        <mssql-jdbc.version>13.2.1.jre8</mssql-jdbc.version>
         <db2-jdbc.version>11.5.0.0</db2-jdbc.version>
-        <postgresql.version>42.6.0</postgresql.version>
+        <postgresql.version>42.7.8</postgresql.version>
         <h2.db.version>2.2.224</h2.db.version>
         <mongodb-driver-sync.version>4.10.2</mongodb-driver-sync.version>
 
-        <zip4j.version>2.11.2</zip4j.version>
-        <jgit.version>5.13.2.202306221912-r</jgit.version>
-        <mvn.invoker.version>3.0.1</mvn.invoker.version>
+        <zip4j.version>2.11.5</zip4j.version>
+        <jgit.version>7.5.0.202512021534-r</jgit.version>
+        <mvn.invoker.version>3.3.0</mvn.invoker.version>
         <commons.net.version>3.9.0</commons.net.version>
         <fastjson.version>1.2.83</fastjson.version>
         <dingding.version>1.0.1</dingding.version>
@@ -52,11 +53,13 @@
         <groovy.version>3.0.10</groovy.version>
         <cron-utils.version>9.2.1</cron-utils.version>
 
-        <powerjob-common.version>5.1.2</powerjob-common.version>
-        <powerjob-remote-impl-http.version>5.1.2</powerjob-remote-impl-http.version>
-        <powerjob-remote-impl-akka.version>5.1.2</powerjob-remote-impl-akka.version>
-        <powerjob-remote-impl-mu.version>5.1.2</powerjob-remote-impl-mu.version>
-        <springdoc-openapi-ui.version>1.6.14</springdoc-openapi-ui.version>
+        <powerjob-common.version>5.2.0</powerjob-common.version>
+        <powerjob-remote-impl-http.version>5.2.0</powerjob-remote-impl-http.version>
+        <powerjob-remote-impl-akka.version>5.2.0</powerjob-remote-impl-akka.version>
+        <powerjob-remote-impl-mu.version>5.2.0</powerjob-remote-impl-mu.version>
+        <springdoc-openapi-ui.version>3.0.1</springdoc-openapi-ui.version>
+        <aliyun-sdk-oss.version>3.18.4</aliyun-sdk-oss.version>
+        <aws-java-sdk-s3.version>2.41.2</aws-java-sdk-s3.version>
         <commons-collections4.version>4.4</commons-collections4.version>
     </properties>
 
@@ -157,8 +160,8 @@
 
         <!-- mysql -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
             <version>${mysql.version}</version>
         </dependency>
         <!-- oracle -->
@@ -201,17 +204,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>${springboot.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-undertow</artifactId>
             <version>${springboot.version}</version>
         </dependency>
         <dependency>
@@ -267,6 +259,16 @@
             <groupId>org.apache.maven.shared</groupId>
             <artifactId>maven-invoker</artifactId>
             <version>${mvn.invoker.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- fastJson(used for serialization of DAG) -->
@@ -286,6 +288,10 @@
                     <groupId>log4j</groupId>
                     <artifactId>log4j</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -298,7 +304,7 @@
         <!-- OPEN API -->
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc-openapi-ui.version}</version>
         </dependency>
 
