@@ -34,18 +34,6 @@ public class StorageConfiguration {
     }
 
     @Bean
-    @Conditional(AliOssService.AliOssCondition.class)
-    public DFsService initAliOssFs() {
-        return new AliOssService();
-    }
-
-    @Bean
-    @Conditional(MinioOssService.MinioOssCondition.class)
-    public DFsService initMinioOssFs() {
-        return new MinioOssService();
-    }
-
-    @Bean
     @Conditional(EmptyDFsService.EmptyCondition.class)
     public DFsService initEmptyDfs() {
         return new EmptyDFsService();
