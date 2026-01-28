@@ -2,6 +2,8 @@ package tech.powerjob.server.initializer;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import jakarta.annotation.Resource;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,8 +31,6 @@ import tech.powerjob.server.web.request.ModifyUserInfoRequest;
 import tech.powerjob.server.web.service.NamespaceWebService;
 import tech.powerjob.server.web.service.PwjbUserWebService;
 
-import javax.annotation.Resource;
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -97,7 +97,7 @@ public class SystemInitializeServiceImpl implements SystemInitializeService {
             log.info("[SystemInitializeService] namespace[{}] already exist", SYSTEM_DEFAULT_NAMESPACE);
             return;
         }
-        
+
         ModifyNamespaceRequest saveNamespaceReq = new ModifyNamespaceRequest();
         saveNamespaceReq.setName(SYSTEM_DEFAULT_NAMESPACE);
         saveNamespaceReq.setCode(SYSTEM_DEFAULT_NAMESPACE);
@@ -127,6 +127,7 @@ public class SystemInitializeServiceImpl implements SystemInitializeService {
         AppInfoDO testApp = createApp(TEST_APP_NAME, TEST_APP_PWD, SYSTEM_DEFAULT_NAMESPACE, testUserIds);
         log.info("[SystemInitializeService] [TestEnv] test app: {}", testApp);
     }
+
     private PowerJobUser createUser(String username, String password, boolean allowedChangePwd) {
         // STEP1: 创建 PWJB 用户
 

@@ -1,8 +1,7 @@
 package tech.powerjob.server.auth.interceptor;
 
+import jakarta.servlet.http.HttpServletRequest;
 import tech.powerjob.server.auth.Permission;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * 动态权限

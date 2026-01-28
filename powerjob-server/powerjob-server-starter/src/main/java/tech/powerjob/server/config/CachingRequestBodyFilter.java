@@ -1,11 +1,11 @@
 package tech.powerjob.server.config;
 
 import com.google.common.collect.Sets;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.*;
 import java.util.Set;
 
@@ -85,6 +85,7 @@ public class CachingRequestBodyFilter implements Filter {
             final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(body.getBytes());
 
             return new ServletInputStream() {
+                @Override
                 public int read() throws IOException {
                     return byteArrayInputStream.read();
                 }

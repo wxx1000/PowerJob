@@ -3,24 +3,26 @@ package tech.powerjob.server.web.controller;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import tech.powerjob.common.enums.ErrorCodes;
+import tech.powerjob.common.enums.SwitchableStatus;
 import tech.powerjob.common.exception.PowerJobException;
 import tech.powerjob.common.response.ResultDTO;
 import tech.powerjob.server.auth.Permission;
 import tech.powerjob.server.auth.PowerJobUser;
 import tech.powerjob.server.auth.Role;
 import tech.powerjob.server.auth.RoleScope;
-import tech.powerjob.common.enums.ErrorCodes;
 import tech.powerjob.server.auth.common.PowerJobAuthException;
 import tech.powerjob.server.auth.interceptor.ApiPermission;
 import tech.powerjob.server.auth.service.WebAuthService;
 import tech.powerjob.server.auth.service.login.PowerJobLoginService;
-import tech.powerjob.common.enums.SwitchableStatus;
 import tech.powerjob.server.persistence.remote.model.AppInfoDO;
 import tech.powerjob.server.persistence.remote.model.NamespaceDO;
 import tech.powerjob.server.persistence.remote.model.UserInfoDO;
@@ -37,8 +39,6 @@ import tech.powerjob.server.web.response.UserBaseVO;
 import tech.powerjob.server.web.response.UserDetailVO;
 import tech.powerjob.server.web.service.UserWebService;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -105,12 +105,12 @@ public class UserInfoController {
     }
 
     @GetMapping("/list")
-    public ResultDTO<List<UserBaseVO>> list(@RequestParam(required = false) String name) {
+    public ResultDTO<List<UserBaseVO>> list(@RequestParam(name = "name",required = false) String name) {
 
         List<UserInfoDO> result;
         if (StringUtils.isEmpty(name)) {
             result = userInfoRepository.findAll();
-        }else {
+        } else {
             result = userInfoRepository.findByUsernameLike("%" + name + "%");
         }
         return ResultDTO.success(convert(result));
@@ -118,6 +118,7 @@ public class UserInfoController {
 
     /**
      * 查询用户信息（用于管理员操作，会返回敏感信息）
+     *
      * @param queryUserRequest 查询请求
      * @return 响应
      */
@@ -220,7 +221,8 @@ public class UserInfoController {
 
     /**
      * 检查针对 user 处理的权限
-     * @param uid 目标 userId
+     *
+     * @param uid                目标 userId
      * @param httpServletRequest http 上下文请求
      */
     private void checkModifyUserPermission(Long uid, HttpServletRequest httpServletRequest) {

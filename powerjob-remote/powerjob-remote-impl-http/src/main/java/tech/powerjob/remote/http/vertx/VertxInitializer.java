@@ -8,6 +8,7 @@ import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import tech.powerjob.common.OmsConstant;
 import tech.powerjob.common.PowerJobDKey;
 import tech.powerjob.common.utils.SysUtils;
@@ -47,6 +48,7 @@ public class VertxInitializer {
         log.info("[PowerJob-Vertx] use HttpServerOptions: {}", httpServerOptions.toJson());
         return vertx.createHttpServer(httpServerOptions);
     }
+
     private static void tryEnableCompression(HttpServerOptions httpServerOptions) {
         // 非核心组件，不直接依赖类（无 import），加载报错可忽略
         try {
@@ -63,8 +65,7 @@ public class VertxInitializer {
 
         HttpClientOptions httpClientOptions = new HttpClientOptions()
                 .setMetricsName(OmsConstant.PACKAGE)
-                .setConnectTimeout(CONNECTION_TIMEOUT_MS)
-                .setMaxPoolSize(Math.max(8, SysUtils.availableProcessors()) * 2);
+                .setConnectTimeout(CONNECTION_TIMEOUT_MS);
 
         // 长连接
         String keepaliveTimeout = System.getProperty(PowerJobDKey.TRANSPORTER_KEEP_ALIVE_TIMEOUT, String.valueOf(DEFAULT_KEEP_ALIVE_TIMEOUT));
@@ -78,7 +79,7 @@ public class VertxInitializer {
         // 压缩判定
         String enableCompressing = System.getProperty(PowerJobDKey.TRANSPORTER_USE_COMPRESSING);
         if (StringUtils.isNotEmpty(enableCompressing)) {
-            httpClientOptions.setTryUseCompression(StringUtils.equalsIgnoreCase(enableCompressing, Boolean.TRUE.toString()));
+            httpClientOptions.setDecompressionSupported(Strings.CI.equals(enableCompressing, Boolean.TRUE.toString()));
         }
 
         log.info("[PowerJob-Vertx] use HttpClientOptions: {}", httpClientOptions.toJson());

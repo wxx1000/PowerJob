@@ -6,16 +6,19 @@ import com.aliyun.dingtalkoauth2_1_0.models.GetUserTokenRequest;
 import com.aliyun.dingtalkoauth2_1_0.models.GetUserTokenResponse;
 import com.aliyun.teaopenapi.models.Config;
 import com.aliyun.teautil.models.RuntimeOptions;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tech.powerjob.common.exception.PowerJobException;
 import tech.powerjob.server.auth.common.AuthConstants;
-import tech.powerjob.server.auth.login.*;
+import tech.powerjob.server.auth.login.LoginTypeInfo;
+import tech.powerjob.server.auth.login.ThirdPartyLoginRequest;
+import tech.powerjob.server.auth.login.ThirdPartyLoginService;
+import tech.powerjob.server.auth.login.ThirdPartyUser;
 import tech.powerjob.server.common.Loggers;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
@@ -24,7 +27,7 @@ import java.nio.charset.StandardCharsets;
  * PowerJob 官方支持钉钉账号体系登录原因：
  * 1. 钉钉作为当下用户体量最大的企业级办公软件，覆盖率足够高，提供钉钉支持能让更多开发者开箱即用
  * 2. 钉钉的 API 设计和 PowerJob 设想一致，算是个最佳实践，其他企业内部的账号体系可参考这套流程进行接入
- *  - PowerJob 重定向到第三方账号体系登陆页 -> 第三方完成登陆 -> 跳转回调 PowerJob auth 接口 -> PowerJob 解析回调登陆信息，完整用户关联
+ * - PowerJob 重定向到第三方账号体系登陆页 -> 第三方完成登陆 -> 跳转回调 PowerJob auth 接口 -> PowerJob 解析回调登陆信息，完整用户关联
  *
  * @author tjq
  * @since 2023/3/26
@@ -125,6 +128,7 @@ public class DingTalkLoginService implements ThirdPartyLoginService {
         config.regionId = "central";
         return new com.aliyun.dingtalkoauth2_1_0.Client(config);
     }
+
     private static com.aliyun.dingtalkcontact_1_0.Client contactClient() throws Exception {
         Config config = new Config();
         config.protocol = "https";

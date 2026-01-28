@@ -2,6 +2,7 @@ package tech.powerjob.server.web.service.impl;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import jakarta.persistence.criteria.Predicate;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -29,7 +30,6 @@ import tech.powerjob.server.web.request.ModifyAppInfoRequest;
 import tech.powerjob.server.web.request.QueryAppInfoRequest;
 import tech.powerjob.server.web.service.NamespaceWebService;
 
-import javax.persistence.criteria.Predicate;
 import java.util.*;
 
 /**

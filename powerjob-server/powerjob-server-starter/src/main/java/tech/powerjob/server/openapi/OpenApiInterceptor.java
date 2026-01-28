@@ -1,6 +1,9 @@
 package tech.powerjob.server.openapi;
 
 import com.google.common.collect.Sets;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,9 +17,6 @@ import tech.powerjob.common.response.PowerResultDTO;
 import tech.powerjob.common.serialize.JsonUtils;
 import tech.powerjob.server.openapi.security.OpenApiSecurityService;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.util.Set;
 
@@ -78,7 +78,7 @@ public class OpenApiInterceptor implements HandlerInterceptor {
     }
 
     @SneakyThrows
-    private void writeResponse( PowerResultDTO<Object> powerResult, HttpServletResponse response) {
+    private void writeResponse(PowerResultDTO<Object> powerResult, HttpServletResponse response) {
 
         // 设置响应的 Content-Type
         response.setContentType(OmsConstant.JSON_MEDIA_TYPE);

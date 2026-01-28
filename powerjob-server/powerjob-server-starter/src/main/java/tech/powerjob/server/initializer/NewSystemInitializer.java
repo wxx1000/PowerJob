@@ -1,5 +1,6 @@
 package tech.powerjob.server.initializer;
 
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -8,7 +9,6 @@ import tech.powerjob.server.extension.LockService;
 import tech.powerjob.server.persistence.remote.model.SundryDO;
 import tech.powerjob.server.persistence.remote.repository.SundryRepository;
 
-import javax.annotation.Resource;
 import java.util.Date;
 import java.util.Optional;
 import java.util.function.Consumer;

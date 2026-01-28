@@ -1,5 +1,7 @@
 package tech.powerjob.server.web.controller;
 
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,8 +23,6 @@ import tech.powerjob.server.persistence.remote.repository.WorkflowInfoRepository
 import tech.powerjob.server.web.request.QueryWorkflowInfoRequest;
 import tech.powerjob.server.web.response.WorkflowInfoVO;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -92,9 +92,9 @@ public class WorkflowController {
         // 无查询条件，查询全部
         if (req.getWorkflowId() == null && StringUtils.isEmpty(req.getKeyword())) {
             wfPage = workflowInfoRepository.findByAppIdAndStatusNot(req.getAppId(), nStatus, pageRequest);
-        }else if (req.getWorkflowId() != null) {
+        } else if (req.getWorkflowId() != null) {
             wfPage = workflowInfoRepository.findByIdAndStatusNot(req.getWorkflowId(), nStatus, pageRequest);
-        }else {
+        } else {
             String condition = "%" + req.getKeyword() + "%";
             wfPage = workflowInfoRepository.findByAppIdAndStatusNotAndWfNameLike(req.getAppId(), nStatus, condition, pageRequest);
         }
@@ -104,9 +104,9 @@ public class WorkflowController {
     @GetMapping("/run")
     @ApiPermission(name = "Workflow-Run", roleScope = RoleScope.APP, requiredPermission = Permission.OPS)
     public ResultDTO<Long> runWorkflow(Long workflowId, HttpServletRequest hsr,
-                                       @RequestParam(required = false,defaultValue = "0") Long delay,
+                                       @RequestParam(required = false, defaultValue = "0") Long delay,
                                        @RequestParam(required = false) String initParams
-                                       ) {
+    ) {
         return ResultDTO.success(workflowService.runWorkflow(workflowId, AuthHeaderUtils.fetchAppIdL(hsr), initParams, delay));
     }
 

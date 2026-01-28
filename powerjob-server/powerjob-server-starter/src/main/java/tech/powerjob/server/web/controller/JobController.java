@@ -1,6 +1,8 @@
 package tech.powerjob.server.web.controller;
 
 import com.google.common.collect.Lists;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -24,8 +26,6 @@ import tech.powerjob.server.persistence.remote.repository.JobInfoRepository;
 import tech.powerjob.server.web.request.QueryJobInfoRequest;
 import tech.powerjob.server.web.response.JobInfoVO;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -56,21 +56,21 @@ public class JobController {
 
     @PostMapping("/copy")
     @ApiPermission(name = "Job-Copy", roleScope = RoleScope.APP, requiredPermission = Permission.WRITE)
-    public ResultDTO<JobInfoVO> copyJob(String jobId, HttpServletRequest hsr) {
+    public ResultDTO<JobInfoVO> copyJob(@RequestParam("jobId") String jobId, HttpServletRequest hsr) {
         preCheck(jobId, hsr);
         return ResultDTO.success(JobInfoVO.from(jobService.copyJob(Long.valueOf(jobId))));
     }
 
     @GetMapping("/export")
     @ApiPermission(name = "Job-Export", roleScope = RoleScope.APP, requiredPermission = Permission.READ)
-    public ResultDTO<SaveJobInfoRequest> exportJob(String jobId, HttpServletRequest hsr) {
+    public ResultDTO<SaveJobInfoRequest> exportJob(@RequestParam("jobId") String jobId, HttpServletRequest hsr) {
         preCheck(jobId, hsr);
         return ResultDTO.success(jobService.exportJob(Long.valueOf(jobId)));
     }
 
     @GetMapping("/disable")
     @ApiPermission(name = "Job-Disable", roleScope = RoleScope.APP, requiredPermission = Permission.WRITE)
-    public ResultDTO<Void> disableJob(String jobId, HttpServletRequest hsr) {
+    public ResultDTO<Void> disableJob(@RequestParam("jobId") String jobId, HttpServletRequest hsr) {
         preCheck(jobId, hsr);
         jobService.disableJob(Long.valueOf(jobId));
         return ResultDTO.success(null);
@@ -78,7 +78,7 @@ public class JobController {
 
     @GetMapping("/delete")
     @ApiPermission(name = "Job-Delete", roleScope = RoleScope.APP, requiredPermission = Permission.WRITE)
-    public ResultDTO<Void> deleteJob(String jobId, HttpServletRequest hsr) {
+    public ResultDTO<Void> deleteJob(@RequestParam("jobId") String jobId, HttpServletRequest hsr) {
         preCheck(jobId, hsr);
         jobService.deleteJob(Long.valueOf(jobId));
         return ResultDTO.success(null);
@@ -86,7 +86,10 @@ public class JobController {
 
     @GetMapping("/run")
     @ApiPermission(name = "Job-Run", roleScope = RoleScope.APP, requiredPermission = Permission.OPS)
-    public ResultDTO<Long> runImmediately(String jobId, @RequestParam(required = false) String instanceParams, HttpServletRequest hsr) {
+    public ResultDTO<Long> runImmediately(@RequestParam("jobId") String jobId,
+                                          @RequestParam(name = "instanceParams",required = false) String instanceParams,
+                                          HttpServletRequest hsr
+    ) {
         preCheck(jobId, hsr);
         RunJobRequest request = new RunJobRequest().setAppId(AuthHeaderUtils.fetchAppIdL(hsr)).setJobId(Long.valueOf(jobId)).setInstanceParams(instanceParams);
         return ResultDTO.success(jobService.runJob(request.getAppId(), request));
@@ -122,7 +125,7 @@ public class JobController {
                 return ResultDTO.success(result);
             }
 
-            if (!jobInfoOpt.get().getAppId().equals(request.getAppId())){
+            if (!jobInfoOpt.get().getAppId().equals(request.getAppId())) {
                 return ResultDTO.failed("请输入该app下的jobId");
             }
 

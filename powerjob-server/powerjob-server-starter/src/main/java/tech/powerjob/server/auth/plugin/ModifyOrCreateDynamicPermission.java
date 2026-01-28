@@ -1,12 +1,12 @@
 package tech.powerjob.server.auth.plugin;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StreamUtils;
 import tech.powerjob.common.serialize.JsonUtils;
 import tech.powerjob.server.auth.Permission;
 import tech.powerjob.server.auth.interceptor.DynamicPermissionPlugin;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**

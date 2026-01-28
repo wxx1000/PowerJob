@@ -1,10 +1,10 @@
 package tech.powerjob.remote.mu;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
 import lombok.extern.slf4j.Slf4j;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class MuMessageCodec extends ByteToMessageCodec<MuMessage> {
             if (data.length > MAX_MESSAGE_SIZE) {
                 throw new IllegalArgumentException("Message too large: " + data.length + " bytes");
             }
-            
+
             // Write message length followed by message data
             out.writeInt(data.length);
             out.writeBytes(data);
@@ -47,10 +47,10 @@ public class MuMessageCodec extends ByteToMessageCodec<MuMessage> {
 
             // Mark reader index to reset if not enough data
             in.markReaderIndex();
-            
+
             // Read message length
             int length = in.readInt();
-            
+
             if (length <= 0 || length > MAX_MESSAGE_SIZE) {
                 throw new IllegalArgumentException("Invalid message length: " + length);
             }
@@ -64,7 +64,7 @@ public class MuMessageCodec extends ByteToMessageCodec<MuMessage> {
             // Read and decode message
             byte[] data = new byte[length];
             in.readBytes(data);
-            
+
             MuMessage message = OBJECT_MAPPER.readValue(data, MuMessage.class);
             out.add(message);
         } catch (Exception e) {

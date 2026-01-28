@@ -1,5 +1,6 @@
 package tech.powerjob.server.web.controller;
 
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,8 +9,6 @@ import tech.powerjob.common.response.ResultDTO;
 import tech.powerjob.server.web.request.ChangePasswordRequest;
 import tech.powerjob.server.web.request.ModifyUserInfoRequest;
 import tech.powerjob.server.web.service.PwjbUserWebService;
-
-import javax.annotation.Resource;
 
 /**
  * PowerJob 自带的登录体系
@@ -27,6 +26,7 @@ public class PwjbUserInfoController {
 
     /**
      * 创建第三方登录体系（PowerJob） 的账户，不允许修改
+     *
      * @param request 请求（此处复用了主框架请求，便于用户一次性把所有参数都填入）
      * @return 创建结果
      */

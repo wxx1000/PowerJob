@@ -2,6 +2,8 @@ package tech.powerjob.server.auth.plugin;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import tech.powerjob.common.response.ResultDTO;
@@ -14,8 +16,6 @@ import tech.powerjob.server.auth.interceptor.GrantPermissionPlugin;
 import tech.powerjob.server.auth.service.permission.PowerJobPermissionService;
 import tech.powerjob.server.common.utils.SpringUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;

@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import jakarta.annotation.Priority;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,6 @@ import tech.powerjob.server.common.spring.condition.PropertyAndOneBeanCondition;
 import tech.powerjob.server.extension.dfs.*;
 import tech.powerjob.server.persistence.storage.AbstractDFsService;
 
-import javax.annotation.Priority;
 import javax.sql.DataSource;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -37,12 +37,12 @@ import java.util.Optional;
 /**
  * postgresql 数据库存储，使用的版本是14
  * ********************* 配置项 *********************
- *  oms.storage.dfs.postgresql_series.driver
- *  oms.storage.dfs.postgresql_series.url
- *  oms.storage.dfs.postgresql_series.username
- *  oms.storage.dfs.postgresql_series.password
- *  oms.storage.dfs.postgresql_series.auto_create_table
- *  oms.storage.dfs.postgresql_series.table_name
+ * oms.storage.dfs.postgresql_series.driver
+ * oms.storage.dfs.postgresql_series.url
+ * oms.storage.dfs.postgresql_series.username
+ * oms.storage.dfs.postgresql_series.password
+ * oms.storage.dfs.postgresql_series.auto_create_table
+ * oms.storage.dfs.postgresql_series.table_name
  *
  * @author jetol
  * @since 2024-1-8
@@ -90,7 +90,7 @@ public class PostgresqlSeriesDfsService extends AbstractDFsService {
             "    INCREMENT BY 1\n" +
             "    NO MINVALUE\n" +
             "    NO MAXVALUE\n" +
-            "    CACHE 1;" ;
+            "    CACHE 1;";
     private static final String CREATE_TABLE_SQL = "CREATE TABLE if not exists powerjob_files (\n" +
             "  id bigint NOT NULL DEFAULT nextval('powerjob_files_id_seq') PRIMARY KEY,\n" +
             "  bucket varchar(255) NOT NULL,\n" +
@@ -123,7 +123,7 @@ public class PostgresqlSeriesDfsService extends AbstractDFsService {
     private void executeDelete(String sql) {
         try (Connection con = dataSource.getConnection()) {
             con.createStatement().executeUpdate(sql);
-        }  catch (Exception e) {
+        } catch (Exception e) {
             log.error("[PostgresqlSeriesDfsService] executeDelete failed, sql: {}", sql);
         }
     }
@@ -146,8 +146,8 @@ public class PostgresqlSeriesDfsService extends AbstractDFsService {
 
         Date date = new Date(System.currentTimeMillis());
 
-        Connection con =null;
-        PreparedStatement pst =null;
+        Connection con = null;
+        PreparedStatement pst = null;
         try {
             con = dataSource.getConnection();
             //pg库提示报错：org.postgresql.util.PSQLException: Large Objects may not be used in auto-commit mode.
@@ -173,18 +173,18 @@ public class PostgresqlSeriesDfsService extends AbstractDFsService {
             log.info("[PostgresqlSeriesDfsService] store [{}] successfully, cost: {}", fileLocation, sw);
 
         } catch (Exception e) {
-            if(con != null){
+            if (con != null) {
                 con.rollback();
             }
             log.error("[PostgresqlSeriesDfsService] store [{}] failed!", fileLocation, e);
             ExceptionUtils.rethrow(e);
-        }finally {
-            if(con != null){
+        } finally {
+            if (con != null) {
                 //设置回来，恢复自动提交模式
                 con.setAutoCommit(true);
                 con.close();
             }
-            if(null != pst){
+            if (null != pst) {
                 pst.close();
             }
             bufferedInputStream.close();
@@ -193,13 +193,14 @@ public class PostgresqlSeriesDfsService extends AbstractDFsService {
 
     /**
      * 上面已经有异常处理，这里直接往上抛
+     *
      * @param bis
      * @return
      * @throws IOException
      */
     public static byte[] bufferedInputStreamToByteArray(BufferedInputStream bis) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        if(null == bis ){
+        if (null == bis) {
             return null;
         }
         // 创建缓冲区
@@ -250,7 +251,7 @@ public class PostgresqlSeriesDfsService extends AbstractDFsService {
 
             log.info("[PostgresqlSeriesDfsService] download [{}] successfully, cost: {}", fileLocation, sw);
 
-        }  catch (Exception e) {
+        } catch (Exception e) {
             log.error("[PostgresqlSeriesDfsService] download file [{}] failed!", fileLocation, e);
             ExceptionUtils.rethrow(e);
         }
@@ -278,7 +279,7 @@ public class PostgresqlSeriesDfsService extends AbstractDFsService {
                     .setMetaInfo(JsonUtils.parseMap(resultSet.getString("meta")));
             return Optional.of(fileMeta);
 
-        }  catch (Exception e) {
+        } catch (Exception e) {
             log.error("[PostgresqlSeriesDfsService] fetchFileMeta [{}] failed!", fileLocation);
             ExceptionUtils.rethrow(e);
         }
@@ -310,8 +311,7 @@ public class PostgresqlSeriesDfsService extends AbstractDFsService {
                 .setUrl(fetchProperty(env, TYPE_POSTGRESQL, KEY_URL))
                 .setUsername(fetchProperty(env, TYPE_POSTGRESQL, KEY_USERNAME))
                 .setPassword(fetchProperty(env, TYPE_POSTGRESQL, KEY_PASSWORD))
-                .setAutoCreateTable(Boolean.TRUE.toString().equalsIgnoreCase(fetchProperty(env, TYPE_POSTGRESQL, KEY_AUTO_CREATE_TABLE)))
-                ;
+                .setAutoCreateTable(Boolean.TRUE.toString().equalsIgnoreCase(fetchProperty(env, TYPE_POSTGRESQL, KEY_AUTO_CREATE_TABLE)));
 
         try {
             initDatabase(postgresqlProperty);

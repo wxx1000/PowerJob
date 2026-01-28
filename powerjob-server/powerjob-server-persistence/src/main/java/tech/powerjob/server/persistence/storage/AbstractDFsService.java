@@ -26,7 +26,7 @@ public abstract class AbstractDFsService implements DFsService, ApplicationConte
         log.info("[DFsService] invoke [{}]'s constructor", this.getClass().getName());
     }
 
-    abstract protected void init(ApplicationContext applicationContext);
+    protected abstract void init(ApplicationContext applicationContext);
 
     protected static final String PROPERTY_KEY = "oms.storage.dfs";
 

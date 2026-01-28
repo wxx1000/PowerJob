@@ -2,6 +2,8 @@ package tech.powerjob.server.web;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
@@ -15,8 +17,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import tech.powerjob.server.common.utils.AOPUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -69,7 +69,7 @@ public class WebLogAspect {
 
             // 192.168.1.1|POST|com.xxx.xxx.save|请求参数
             log.info("{}|{}|{}|{}", request.getRemoteAddr(), request.getMethod(), classMethod, stringify(joinPoint.getArgs()));
-        }catch (Exception e) {
+        } catch (Exception e) {
             // just for safe
             log.error("[WebLogAspect] aop occur exception, please concat @KFCFans to fix the bug!", e);
         }
@@ -77,6 +77,7 @@ public class WebLogAspect {
 
     /**
      * 序列化请求对象，需要特殊处理无法序列化的对象（HttpServletRequest/HttpServletResponse）
+     *
      * @param args Web请求参数
      * @return JSON字符串
      */

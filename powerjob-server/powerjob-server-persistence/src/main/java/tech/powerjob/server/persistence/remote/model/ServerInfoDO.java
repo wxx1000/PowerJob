@@ -1,10 +1,9 @@
 package tech.powerjob.server.persistence.remote.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -24,7 +23,6 @@ public class ServerInfoDO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
     private Long id;
     /**
      * 服务器IP地址

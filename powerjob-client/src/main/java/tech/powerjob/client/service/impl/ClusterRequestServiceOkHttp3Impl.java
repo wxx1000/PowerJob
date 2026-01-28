@@ -56,7 +56,7 @@ public class ClusterRequestServiceOkHttp3Impl extends AppAuthClusterRequestServi
             case APPLICATION_JSON:
                 MediaType jsonType = MediaType.parse(OmsConstant.JSON_MEDIA_TYPE);
                 String body = obj instanceof String ? (String) obj : JsonUtils.toJSONStringUnsafe(obj);
-                requestBody = RequestBody.create(jsonType, body);
+                requestBody = RequestBody.create(body, jsonType);
 
                 break;
             case APPLICATION_FORM:

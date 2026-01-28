@@ -1,11 +1,10 @@
 package tech.powerjob.server.persistence.remote.model;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -19,13 +18,12 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(indexes = {
-        @Index(name = "idx01_workflow_info",columnList = "appId,status,timeExpressionType,nextTriggerTime")
+        @Index(name = "idx01_workflow_info", columnList = "appId,status,timeExpressionType,nextTriggerTime")
 })
 public class WorkflowInfoDO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
     private Long id;
 
     private String wfName;

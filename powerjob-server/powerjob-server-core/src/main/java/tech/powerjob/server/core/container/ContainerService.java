@@ -4,6 +4,9 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
+import jakarta.annotation.Resource;
+import jakarta.websocket.RemoteEndpoint;
+import jakarta.websocket.Session;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -26,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import tech.powerjob.common.OmsConstant;
+import tech.powerjob.common.enums.SwitchableStatus;
 import tech.powerjob.common.exception.ImpossibleException;
 import tech.powerjob.common.model.DeployedContainerInfo;
 import tech.powerjob.common.model.GitRepoInfo;
@@ -37,7 +41,6 @@ import tech.powerjob.common.utils.NetUtils;
 import tech.powerjob.common.utils.SegmentLock;
 import tech.powerjob.remote.framework.base.URL;
 import tech.powerjob.server.common.constants.ContainerSourceType;
-import tech.powerjob.common.enums.SwitchableStatus;
 import tech.powerjob.server.common.module.WorkerInfo;
 import tech.powerjob.server.common.utils.OmsFileUtils;
 import tech.powerjob.server.extension.LockService;
@@ -46,13 +49,10 @@ import tech.powerjob.server.persistence.remote.model.ContainerInfoDO;
 import tech.powerjob.server.persistence.remote.repository.ContainerInfoRepository;
 import tech.powerjob.server.persistence.storage.Constants;
 import tech.powerjob.server.remote.server.redirector.DesignateServer;
-import tech.powerjob.server.remote.transporter.impl.ServerURLFactory;
 import tech.powerjob.server.remote.transporter.TransportService;
+import tech.powerjob.server.remote.transporter.impl.ServerURLFactory;
 import tech.powerjob.server.remote.worker.WorkerClusterQueryService;
 
-import javax.annotation.Resource;
-import javax.websocket.RemoteEndpoint;
-import javax.websocket.Session;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -94,6 +94,7 @@ public class ContainerService {
 
     /**
      * 保存容器
+     *
      * @param container 容器保存请求
      */
     public void save(ContainerInfoDO container) {
@@ -111,7 +112,7 @@ public class ContainerService {
         // 文件上传形式的 sourceInfo 为该文件的 md5 值，Git形式的 md5 在部署阶段生成
         if (container.getSourceType() == ContainerSourceType.FatJar.getV()) {
             container.setVersion(container.getSourceInfo());
-        }else {
+        } else {
             container.setVersion("init");
         }
         containerInfoRepository.saveAndFlush(container);
@@ -119,7 +120,8 @@ public class ContainerService {
 
     /**
      * 删除容器（通知 Worker 销毁容器 & 删除数据库）
-     * @param appId 应用ID，用于保护性判断
+     *
+     * @param appId       应用ID，用于保护性判断
      * @param containerId 容器ID
      */
     public void delete(Long appId, Long containerId) {
@@ -145,6 +147,7 @@ public class ContainerService {
 
     /**
      * 上传用于部署的容器的 Jar 文件
+     *
      * @param file 接受的文件
      * @return 该文件的 md5 值
      * @throws IOException 异常
@@ -195,6 +198,7 @@ public class ContainerService {
 
     /**
      * 获取构建容器所需要的 Jar 文件
+     *
      * @param version 版本
      * @return 本地Jar文件
      */
@@ -223,8 +227,9 @@ public class ContainerService {
 
     /**
      * 部署容器
+     *
      * @param containerId 容器ID
-     * @param session WebSocket Session
+     * @param session     WebSocket Session
      * @throws Exception 异常
      */
     public void deploy(Long containerId, Session session) throws Exception {
@@ -296,14 +301,15 @@ public class ContainerService {
 
             remote.sendText("SYSTEM: deploy finished, congratulations!");
 
-        }finally {
+        } finally {
             lockService.unlock(deployLock);
         }
     }
 
     /**
      * 获取部署信息
-     * @param appId 容器所属应用ID
+     *
+     * @param appId       容器所属应用ID
      * @param containerId 容器ID
      * @return 拼接好的可阅读字符串
      */
@@ -389,7 +395,7 @@ public class ContainerService {
 
                 if (container.getVersion().equals(oldVersion)) {
                     remote.sendText(String.format("SYSTEM: this commitId(%s) is the same as the last.", oldVersion));
-                }else {
+                } else {
                     remote.sendText(String.format("SYSTEM: new version detected, from %s to %s.", oldVersion, container.getVersion()));
                 }
                 remote.sendText("SYSTEM: git clone successfully, star to compile the project.");
@@ -440,7 +446,7 @@ public class ContainerService {
                 FileUtils.copyFile(jarWithDependency, localFile);
 
                 return localFile;
-            } catch (Throwable  t) {
+            } catch (Throwable t) {
                 log.error("[ContainerService] prepareJarFile failed for container: {}", container, t);
                 remote.sendText("SYSTEM: [ERROR] prepare jar file failed: " + ExceptionUtils.getStackTrace(t));
             } finally {
@@ -487,12 +493,12 @@ public class ContainerService {
                 FileUtils.forceMkdirParent(targetFile);
 
                 dFsService.download(new DownloadRequest().setTarget(targetFile).setFileLocation(dfsFL));
-            }catch (Exception e) {
+            } catch (Exception e) {
                 CommonUtils.executeIgnoreException(() -> FileUtils.forceDelete(targetFile));
                 ExceptionUtils.rethrow(e);
             }
 
-        }finally {
+        } finally {
             segmentLock.unlock(lockId);
         }
 
@@ -504,6 +510,7 @@ public class ContainerService {
 
     /**
      * 计算 sleep 时间（每10M睡眠1S + 1）
+     *
      * @param fileLength 文件的字节数
      * @return sleep 时间
      */

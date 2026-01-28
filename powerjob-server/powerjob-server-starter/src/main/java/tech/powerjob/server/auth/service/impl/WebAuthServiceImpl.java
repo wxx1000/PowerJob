@@ -3,18 +3,18 @@ package tech.powerjob.server.auth.service.impl;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import tech.powerjob.common.enums.ErrorCodes;
 import tech.powerjob.common.serialize.JsonUtils;
 import tech.powerjob.server.auth.*;
 import tech.powerjob.server.auth.common.AuthConstants;
-import tech.powerjob.common.enums.ErrorCodes;
 import tech.powerjob.server.auth.common.PowerJobAuthException;
 import tech.powerjob.server.auth.service.WebAuthService;
 import tech.powerjob.server.auth.service.permission.PowerJobPermissionService;
 import tech.powerjob.server.web.request.ComponentUserRoleInfo;
 
-import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -43,7 +43,7 @@ public class WebAuthServiceImpl implements WebAuthService {
     @Override
     public void processPermissionOnSave(RoleScope roleScope, Long target, ComponentUserRoleInfo o) {
         ComponentUserRoleInfo componentUserRoleInfo = Optional.ofNullable(o).orElse(new ComponentUserRoleInfo());
-        
+
         Map<Role, Set<Long>> role2Uids = powerJobPermissionService.fetchUserWithPermissions(roleScope, target);
         diffGrant(roleScope, target, Role.OBSERVER, componentUserRoleInfo.getObserver(), role2Uids);
         diffGrant(roleScope, target, Role.QA, componentUserRoleInfo.getQa(), role2Uids);

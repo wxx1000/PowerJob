@@ -28,10 +28,10 @@ public class ValidateController {
     private final TimingStrategyService timingStrategyService;
 
     @GetMapping("/timeExpression")
-    public ResultDTO<List<String>> checkTimeExpression(TimeExpressionType timeExpressionType,
-                                                       String timeExpression,
-                                                       @RequestParam(required = false) Long startTime,
-                                                       @RequestParam(required = false) Long endTime
+    public ResultDTO<List<String>> checkTimeExpression(@RequestParam("timeExpressionType") TimeExpressionType timeExpressionType,
+                                                       @RequestParam("timeExpression") String timeExpression,
+                                                       @RequestParam(name = "startTime", required = false) Long startTime,
+                                                       @RequestParam(name = "endTime", required = false) Long endTime
     ) {
         try {
             timingStrategyService.validate(timeExpressionType, timeExpression, startTime, endTime);

@@ -1,6 +1,7 @@
 package tech.powerjob.server.auth.common.utils;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.Objects;
 
 /**
@@ -14,6 +15,7 @@ public class AuthHeaderUtils {
     public static String fetchAppId(HttpServletRequest request) {
         return HttpServletUtils.fetchFromHeader("AppId", request);
     }
+
     public static Long fetchAppIdL(HttpServletRequest request) {
         return Long.valueOf(Objects.requireNonNull(HttpServletUtils.fetchFromHeader("AppId", request), "AppId from header is null!"));
     }
@@ -21,6 +23,7 @@ public class AuthHeaderUtils {
     public static String fetchNamespaceId(HttpServletRequest request) {
         return HttpServletUtils.fetchFromHeader("NamespaceId", request);
     }
+
     public static Long fetchNamespaceIdL(HttpServletRequest request) {
         return Long.valueOf(Objects.requireNonNull(HttpServletUtils.fetchFromHeader("NamespaceId", request), "NamespaceId from header is null!"));
     }

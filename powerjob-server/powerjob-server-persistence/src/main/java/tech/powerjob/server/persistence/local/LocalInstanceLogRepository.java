@@ -1,10 +1,10 @@
 package tech.powerjob.server.persistence.local;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Stream;
 

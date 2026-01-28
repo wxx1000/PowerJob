@@ -1,6 +1,8 @@
 package tech.powerjob.server.openapi.security;
 
 import com.google.common.collect.Maps;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,8 +18,6 @@ import tech.powerjob.server.auth.jwt.ParseResult;
 import tech.powerjob.server.core.service.AppInfoService;
 import tech.powerjob.server.persistence.remote.model.AppInfoDO;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Optional;
 

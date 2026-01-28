@@ -1,6 +1,5 @@
 package tech.powerjob.worker.core.tracker.task.heavy;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.base.Stopwatch;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -10,6 +9,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import tech.powerjob.common.RemoteConstant;
+import tech.powerjob.common.enhance.SafeRunnable;
 import tech.powerjob.common.enums.ExecuteType;
 import tech.powerjob.common.enums.TaskTrackerBehavior;
 import tech.powerjob.common.enums.TimeExpressionType;
@@ -20,7 +20,6 @@ import tech.powerjob.common.serialize.JsonUtils;
 import tech.powerjob.common.utils.CollectionUtils;
 import tech.powerjob.common.utils.CommonUtils;
 import tech.powerjob.common.utils.SegmentLock;
-import tech.powerjob.common.enhance.SafeRunnable;
 import tech.powerjob.worker.common.WorkerRuntime;
 import tech.powerjob.worker.common.constants.TaskConstant;
 import tech.powerjob.worker.common.constants.TaskStatus;
@@ -35,6 +34,7 @@ import tech.powerjob.worker.pojo.model.InstanceInfo;
 import tech.powerjob.worker.pojo.request.ProcessorTrackerStatusReportReq;
 import tech.powerjob.worker.pojo.request.TaskTrackerStartTaskReq;
 import tech.powerjob.worker.pojo.request.TaskTrackerStopInstanceReq;
+import tools.jackson.core.type.TypeReference;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -80,7 +80,7 @@ public abstract class HeavyTaskTracker extends TaskTracker {
 
     protected HeavyTaskTracker(ServerScheduleJobReq req, WorkerRuntime workerRuntime) {
         // 初始化成员变量
-        super(req,workerRuntime);
+        super(req, workerRuntime);
         // 赋予时间表达式类型
         instanceInfo.setTimeExpressionType(TimeExpressionType.valueOf(req.getTimeExpressionType()).getV());
         // 保护性操作
@@ -565,7 +565,8 @@ public abstract class HeavyTaskTracker extends TaskTracker {
                     return;
                 }
 
-                List<String> workerList = JsonUtils.parseObject(response.getData(), new TypeReference<List<String>>() {});
+                List<String> workerList = JsonUtils.parseObject(response.getData(), new TypeReference<List<String>>() {
+                });
                 ptStatusHolder.register(workerList);
             } catch (Exception e) {
                 log.warn("[TaskTracker-{}] detective failed, currentServer: {}", instanceId, currentServerAddress, e);

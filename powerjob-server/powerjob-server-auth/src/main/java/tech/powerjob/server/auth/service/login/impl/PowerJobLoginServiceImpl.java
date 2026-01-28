@@ -2,6 +2,7 @@ package tech.powerjob.server.auth.service.login.impl;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -10,11 +11,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import tech.powerjob.common.enums.ErrorCodes;
+import tech.powerjob.common.enums.SwitchableStatus;
 import tech.powerjob.common.serialize.JsonUtils;
 import tech.powerjob.server.auth.LoginUserHolder;
 import tech.powerjob.server.auth.PowerJobUser;
 import tech.powerjob.server.auth.common.AuthConstants;
-import tech.powerjob.common.enums.ErrorCodes;
 import tech.powerjob.server.auth.common.PowerJobAuthException;
 import tech.powerjob.server.auth.common.utils.HttpServletUtils;
 import tech.powerjob.server.auth.jwt.JwtService;
@@ -22,11 +25,9 @@ import tech.powerjob.server.auth.login.*;
 import tech.powerjob.server.auth.service.login.LoginRequest;
 import tech.powerjob.server.auth.service.login.PowerJobLoginService;
 import tech.powerjob.server.common.Loggers;
-import tech.powerjob.common.enums.SwitchableStatus;
 import tech.powerjob.server.persistence.remote.model.UserInfoDO;
 import tech.powerjob.server.persistence.remote.repository.UserInfoRepository;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -67,7 +68,7 @@ public class PowerJobLoginServiceImpl implements PowerJobLoginService {
     }
 
     @Override
-    public String fetchThirdPartyLoginUrl(String type, HttpServletRequest httpServletRequest) {
+    public String fetchThirdPartyLoginUrl(@RequestParam("type") String type, HttpServletRequest httpServletRequest) {
         final ThirdPartyLoginService thirdPartyLoginService = fetchBizLoginService(type);
         return thirdPartyLoginService.generateLoginUrl(httpServletRequest);
     }
@@ -181,6 +182,7 @@ public class PowerJobLoginServiceImpl implements PowerJobLoginService {
 
     /**
      * 检查 user 状态
+     *
      * @param dbUser user
      */
     private void checkUserStatus(UserInfoDO dbUser) {

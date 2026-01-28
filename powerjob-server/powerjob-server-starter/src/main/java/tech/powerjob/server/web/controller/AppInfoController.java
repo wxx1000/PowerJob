@@ -2,6 +2,7 @@ package tech.powerjob.server.web.controller;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -44,7 +45,6 @@ import tech.powerjob.server.web.response.UserBaseVO;
 import tech.powerjob.server.web.service.NamespaceWebService;
 import tech.powerjob.server.web.service.UserWebService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;

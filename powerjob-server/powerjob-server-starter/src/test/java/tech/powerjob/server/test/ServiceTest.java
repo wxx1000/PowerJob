@@ -1,5 +1,6 @@
 package tech.powerjob.server.test;
 
+import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import tech.powerjob.server.core.uid.IdGenerateService;
@@ -8,7 +9,6 @@ import tech.powerjob.server.core.scheduler.CleanService;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.annotation.Resource;
 
 /**
  * 服务测试

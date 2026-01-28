@@ -1,13 +1,12 @@
 package tech.powerjob.server.persistence.remote.model;
 
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 import tech.powerjob.common.enums.WorkflowNodeType;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -28,7 +27,6 @@ public class WorkflowNodeInfoDO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
     private Long id;
 
     @Column(nullable = false)

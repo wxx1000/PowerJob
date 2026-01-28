@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import jakarta.annotation.Priority;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
@@ -15,14 +16,13 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.core.env.Environment;
+import tech.powerjob.common.enums.SwitchableStatus;
 import tech.powerjob.common.serialize.JsonUtils;
 import tech.powerjob.common.utils.CommonUtils;
-import tech.powerjob.common.enums.SwitchableStatus;
 import tech.powerjob.server.common.spring.condition.PropertyAndOneBeanCondition;
 import tech.powerjob.server.extension.dfs.*;
 import tech.powerjob.server.persistence.storage.AbstractDFsService;
 
-import javax.annotation.Priority;
 import javax.sql.DataSource;
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -38,12 +38,12 @@ import java.util.Optional;
  * PS2. 官方基于 MySQL 测试，其他数据库使用前请自测，敬请谅解！
  * PS3. 数据库并不适合大规模的文件存储，该扩展仅适用于简单业务，大型业务场景请选择其他存储方案（OSS、MongoDB等）
  * ********************* 配置项 *********************
- *  oms.storage.dfs.mysql_series.driver
- *  oms.storage.dfs.mysql_series.url
- *  oms.storage.dfs.mysql_series.username
- *  oms.storage.dfs.mysql_series.password
- *  oms.storage.dfs.mysql_series.auto_create_table
- *  oms.storage.dfs.mysql_series.table_name
+ * oms.storage.dfs.mysql_series.driver
+ * oms.storage.dfs.mysql_series.url
+ * oms.storage.dfs.mysql_series.username
+ * oms.storage.dfs.mysql_series.password
+ * oms.storage.dfs.mysql_series.auto_create_table
+ * oms.storage.dfs.mysql_series.table_name
  *
  * @author tjq
  * @since 2023/8/9
@@ -121,7 +121,7 @@ public class MySqlSeriesDfsService extends AbstractDFsService {
     private void executeDelete(String sql) {
         try (Connection con = dataSource.getConnection()) {
             con.createStatement().executeUpdate(sql);
-        }  catch (Exception e) {
+        } catch (Exception e) {
             log.error("[MySqlSeriesDfsService] executeDelete failed, sql: {}", sql);
         }
     }
@@ -165,7 +165,7 @@ public class MySqlSeriesDfsService extends AbstractDFsService {
         } catch (Exception e) {
             log.error("[MySqlSeriesDfsService] store [{}] failed!", fileLocation);
             ExceptionUtils.rethrow(e);
-        }finally {
+        } finally {
             bufferedInputStream.close();
         }
     }
@@ -196,7 +196,7 @@ public class MySqlSeriesDfsService extends AbstractDFsService {
 
             log.info("[MySqlSeriesDfsService] download [{}] successfully, cost: {}", fileLocation, sw);
 
-        }  catch (Exception e) {
+        } catch (Exception e) {
             log.error("[MySqlSeriesDfsService] download file [{}] failed!", fileLocation, e);
             ExceptionUtils.rethrow(e);
         }
@@ -224,7 +224,7 @@ public class MySqlSeriesDfsService extends AbstractDFsService {
                     .setMetaInfo(JsonUtils.parseMap(resultSet.getString("meta")));
             return Optional.of(fileMeta);
 
-        }  catch (Exception e) {
+        } catch (Exception e) {
             log.error("[MySqlSeriesDfsService] fetchFileMeta [{}] failed!", fileLocation);
             ExceptionUtils.rethrow(e);
         }
@@ -256,8 +256,7 @@ public class MySqlSeriesDfsService extends AbstractDFsService {
                 .setUrl(fetchProperty(env, TYPE_MYSQL, KEY_URL))
                 .setUsername(fetchProperty(env, TYPE_MYSQL, KEY_USERNAME))
                 .setPassword(fetchProperty(env, TYPE_MYSQL, KEY_PASSWORD))
-                .setAutoCreateTable(Boolean.TRUE.toString().equalsIgnoreCase(fetchProperty(env, TYPE_MYSQL, KEY_AUTO_CREATE_TABLE)))
-                ;
+                .setAutoCreateTable(Boolean.TRUE.toString().equalsIgnoreCase(fetchProperty(env, TYPE_MYSQL, KEY_AUTO_CREATE_TABLE)));
 
         try {
             initDatabase(mySQLProperty);

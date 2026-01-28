@@ -1,11 +1,10 @@
 package tech.powerjob.server.persistence.local;
 
-import tech.powerjob.common.enums.LogLevel;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
+import tech.powerjob.common.enums.LogLevel;
 
 /**
  * 本地的运行时日志
@@ -37,7 +36,7 @@ public class LocalInstanceLogDO {
      * 日志内容
      */
     @Lob
-    @Column(columnDefinition="TEXT")
+    @Column(columnDefinition = "TEXT")
     private String logContent;
 
     /**

@@ -1,5 +1,8 @@
 package tech.powerjob.server.web.controller;
 
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -30,9 +33,6 @@ import tech.powerjob.server.web.request.QueryInstanceRequest;
 import tech.powerjob.server.web.response.InstanceDetailVO;
 import tech.powerjob.server.web.response.InstanceInfoVO;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
@@ -63,21 +63,21 @@ public class InstanceController {
 
     @GetMapping("/stop")
     @ApiPermission(name = "Instance-Stop", roleScope = RoleScope.APP, requiredPermission = Permission.OPS)
-    public ResultDTO<Void> stopInstance(Long instanceId, HttpServletRequest hsr) {
+    public ResultDTO<Void> stopInstance(@RequestParam("instanceId") Long instanceId, HttpServletRequest hsr) {
         instanceService.stopInstance(AuthHeaderUtils.fetchAppIdL(hsr), instanceId);
         return ResultDTO.success(null);
     }
 
     @GetMapping("/retry")
     @ApiPermission(name = "Instance-Retry", roleScope = RoleScope.APP, requiredPermission = Permission.OPS)
-    public ResultDTO<Void> retryInstance(Long instanceId, HttpServletRequest hsr) {
+    public ResultDTO<Void> retryInstance(@RequestParam("instanceId") Long instanceId, HttpServletRequest hsr) {
         instanceService.retryInstance(AuthHeaderUtils.fetchAppIdL(hsr), instanceId);
         return ResultDTO.success(null);
     }
 
     @GetMapping("/detail")
     @ApiPermission(name = "Instance-Detail", roleScope = RoleScope.APP, requiredPermission = Permission.READ)
-    public ResultDTO<InstanceDetailVO> getInstanceDetail(Long instanceId, HttpServletRequest hsr) {
+    public ResultDTO<InstanceDetailVO> getInstanceDetail(@RequestParam("instanceId") Long instanceId, HttpServletRequest hsr) {
         QueryInstanceDetailRequest queryInstanceDetailRequest = new QueryInstanceDetailRequest();
         queryInstanceDetailRequest.setAppId(AuthHeaderUtils.fetchAppIdL(hsr));
         queryInstanceDetailRequest.setInstanceId(instanceId);
@@ -106,25 +106,25 @@ public class InstanceController {
 
     @GetMapping("/log")
     @ApiPermission(name = "Instance-Log", roleScope = RoleScope.APP, requiredPermission = Permission.OPS)
-    public ResultDTO<StringPage> getInstanceLog(Long instanceId, Long index, HttpServletRequest hsr) {
+    public ResultDTO<StringPage> getInstanceLog(@RequestParam("instanceId") Long instanceId, @RequestParam("index") Long index, HttpServletRequest hsr) {
         return ResultDTO.success(instanceLogService.fetchInstanceLog(AuthHeaderUtils.fetchAppIdL(hsr), instanceId, index));
     }
 
     @GetMapping("/downloadLogUrl")
     @ApiPermission(name = "Instance-FetchDownloadLogUrl", roleScope = RoleScope.APP, requiredPermission = Permission.READ)
-    public ResultDTO<String> getDownloadUrl(Long instanceId, HttpServletRequest hsr) {
+    public ResultDTO<String> getDownloadUrl(@RequestParam("instanceId") Long instanceId, HttpServletRequest hsr) {
         return ResultDTO.success(instanceLogService.fetchDownloadUrl(AuthHeaderUtils.fetchAppIdL(hsr), instanceId));
     }
 
     @GetMapping("/downloadLog")
-    public void downloadLogFile(Long instanceId , HttpServletResponse response) throws Exception {
+    public void downloadLogFile(@RequestParam("instanceId") Long instanceId, HttpServletResponse response) throws Exception {
         File file = instanceLogService.downloadInstanceLog(instanceId);
         OmsFileUtils.file2HttpResponse(file, response);
     }
 
     @GetMapping("/downloadLog4Console")
     @SneakyThrows
-    public void downloadLog4Console(Long instanceId , HttpServletResponse response, HttpServletRequest hsr) {
+    public void downloadLog4Console(@RequestParam("instanceId") Long instanceId, HttpServletResponse response, HttpServletRequest hsr) {
         Long appId = AuthHeaderUtils.fetchAppIdL(hsr);
         // 获取内部下载链接
         String downloadUrl = instanceLogService.fetchDownloadUrl(appId, instanceId);

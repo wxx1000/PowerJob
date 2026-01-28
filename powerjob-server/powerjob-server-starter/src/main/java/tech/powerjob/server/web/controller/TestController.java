@@ -1,6 +1,7 @@
 package tech.powerjob.server.web.controller;
 
 import com.google.common.collect.Lists;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +17,6 @@ import tech.powerjob.server.core.alarm.module.JobInstanceAlarm;
 import tech.powerjob.server.extension.alarm.AlarmTarget;
 import tech.powerjob.server.remote.transporter.TransportService;
 
-import javax.annotation.Resource;
 import java.util.Map;
 
 /**
@@ -69,7 +69,7 @@ public class TestController {
         Class<? extends PowerSerializable> requestClz = (Class<? extends PowerSerializable>) Class.forName(requestClassName);
 
         if ("ask".equalsIgnoreCase(method)) {
-            return transportService.ask(protocol, JsonUtils.toJavaObject(url, URL.class), JsonUtils.toJavaObject(request, requestClz) , AskResponse.class);
+            return transportService.ask(protocol, JsonUtils.toJavaObject(url, URL.class), JsonUtils.toJavaObject(request, requestClz), AskResponse.class);
         }
 
         transportService.tell(protocol, JsonUtils.toJavaObject(url, URL.class), (PowerSerializable) request);

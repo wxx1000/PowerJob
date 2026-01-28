@@ -1,11 +1,10 @@
 package tech.powerjob.server.persistence.remote.repository;
 
-import tech.powerjob.server.persistence.remote.model.OmsLockDO;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-
-import javax.transaction.Transactional;
+import tech.powerjob.server.persistence.remote.model.OmsLockDO;
 
 /**
  * 利用唯一性约束作为数据库锁

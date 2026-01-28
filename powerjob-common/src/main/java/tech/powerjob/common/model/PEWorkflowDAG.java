@@ -1,15 +1,15 @@
 package tech.powerjob.common.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.google.common.collect.Lists;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import tech.powerjob.common.enums.WorkflowNodeType;
+import tools.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.ser.std.ToStringSerializer;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.util.List;
 
@@ -133,7 +133,7 @@ public class PEWorkflowDAG implements Serializable {
         }
     }
 
-    public PEWorkflowDAG(@Nonnull List<Node> nodes, @Nullable List<Edge> edges) {
+    public PEWorkflowDAG(@NonNull List<Node> nodes, @Nullable List<Edge> edges) {
         this.nodes = nodes;
         this.edges = edges == null ? Lists.newLinkedList() : edges;
     }

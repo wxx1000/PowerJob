@@ -13,6 +13,7 @@ import com.mongodb.client.gridfs.GridFSDownloadStream;
 import com.mongodb.client.gridfs.GridFSFindIterable;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.mongodb.client.model.Filters;
+import jakarta.annotation.Priority;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -22,11 +23,10 @@ import org.bson.types.ObjectId;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.core.env.Environment;
+import tech.powerjob.server.common.spring.condition.PropertyAndOneBeanCondition;
 import tech.powerjob.server.extension.dfs.*;
 import tech.powerjob.server.persistence.storage.AbstractDFsService;
-import tech.powerjob.server.common.spring.condition.PropertyAndOneBeanCondition;
 
-import javax.annotation.Priority;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -109,7 +109,7 @@ public class GridFsService extends AbstractDFsService {
             try {
                 bucket.delete(objectId);
                 log.info("[GridFsService] deleted {}#{}", bucketName, objectId);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 log.error("[GridFsService] deleted {}#{} failed.", bucketName, objectId, e);
             }
         });

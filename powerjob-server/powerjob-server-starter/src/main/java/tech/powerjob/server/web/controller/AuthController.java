@@ -1,5 +1,9 @@
 package tech.powerjob.server.web.controller;
 
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 import tech.powerjob.common.response.ResultDTO;
 import tech.powerjob.common.utils.CollectionUtils;
@@ -14,10 +18,6 @@ import tech.powerjob.server.auth.service.login.LoginRequest;
 import tech.powerjob.server.auth.service.login.PowerJobLoginService;
 import tech.powerjob.server.web.request.ComponentUserRoleInfo;
 
-import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,14 +42,15 @@ public class AuthController {
     }
 
     @GetMapping("/thirdPartyLoginUrl")
-    public ResultDTO<String> getThirdPartyLoginUrl(String type, HttpServletRequest request) {
+    public ResultDTO<String> getThirdPartyLoginUrl(@RequestParam("type") String type, HttpServletRequest request) {
         String url = powerJobLoginService.fetchThirdPartyLoginUrl(type, request);
         return ResultDTO.success(url);
     }
 
     /**
      * 第三方账号体系回调登录接口，eg, 接受钉钉登录回调
-     * @param httpServletRequest 请求
+     *
+     * @param httpServletRequest  请求
      * @param httpServletResponse 响应
      * @return 登录结果
      */
@@ -70,7 +71,8 @@ public class AuthController {
 
     /**
      * 第三方账号体系直接登录接口，eg, 接受 PowerJob 自带账号密码体系的登录请求
-     * @param loginRequest 登录请求
+     *
+     * @param loginRequest        登录请求
      * @param httpServletResponse 响应
      * @return 登录结果
      */

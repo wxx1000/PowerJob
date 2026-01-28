@@ -2,12 +2,12 @@ package tech.powerjob.server.core.service;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import tech.powerjob.server.persistence.remote.model.UserInfoDO;
 import tech.powerjob.server.persistence.remote.repository.UserInfoRepository;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,6 +26,7 @@ public class UserService {
 
     /**
      * 根据用户ID字符串获取用户信息详细列表
+     *
      * @param userIds 逗号分割的用户ID信息
      * @return 用户信息详细列表
      */

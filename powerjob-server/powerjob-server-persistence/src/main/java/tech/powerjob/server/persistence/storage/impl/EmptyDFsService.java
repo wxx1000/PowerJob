@@ -1,13 +1,13 @@
 package tech.powerjob.server.persistence.storage.impl;
 
+import jakarta.annotation.Priority;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Conditional;
+import tech.powerjob.server.common.spring.condition.PropertyAndOneBeanCondition;
 import tech.powerjob.server.extension.dfs.*;
 import tech.powerjob.server.persistence.storage.AbstractDFsService;
-import tech.powerjob.server.common.spring.condition.PropertyAndOneBeanCondition;
 
-import javax.annotation.Priority;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;

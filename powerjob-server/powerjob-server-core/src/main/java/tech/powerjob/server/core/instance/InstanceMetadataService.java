@@ -1,17 +1,16 @@
 package tech.powerjob.server.core.instance;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import tech.powerjob.server.persistence.remote.model.InstanceInfoDO;
 import tech.powerjob.server.persistence.remote.model.JobInfoDO;
 import tech.powerjob.server.persistence.remote.repository.InstanceInfoRepository;
 import tech.powerjob.server.persistence.remote.repository.JobInfoRepository;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
@@ -49,6 +48,7 @@ public class InstanceMetadataService implements InitializingBean {
 
     /**
      * 根据 instanceId 获取 JobInfo
+     *
      * @param instanceId instanceId
      * @return JobInfoDO
      * @throws ExecutionException 异常
@@ -66,8 +66,9 @@ public class InstanceMetadataService implements InitializingBean {
 
     /**
      * 装载缓存
+     *
      * @param instanceId instanceId
-     * @param jobInfoDO 原始的任务数据
+     * @param jobInfoDO  原始的任务数据
      */
     public void loadJobInfo(Long instanceId, JobInfoDO jobInfoDO) {
         instanceId2JobInfoCache.put(instanceId, jobInfoDO);
@@ -75,6 +76,7 @@ public class InstanceMetadataService implements InitializingBean {
 
     /**
      * 失效缓存
+     *
      * @param instanceId instanceId
      */
     public void invalidateJobInfo(Long instanceId) {

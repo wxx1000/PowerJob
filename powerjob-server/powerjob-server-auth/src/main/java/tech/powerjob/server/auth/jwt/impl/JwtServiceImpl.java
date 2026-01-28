@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -13,8 +14,7 @@ import tech.powerjob.server.auth.jwt.JwtService;
 import tech.powerjob.server.auth.jwt.ParseResult;
 import tech.powerjob.server.auth.jwt.SecretProvider;
 
-import javax.annotation.Resource;
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
@@ -45,8 +45,7 @@ public class JwtServiceImpl implements JwtService {
             "CengMengXiangZhangJianZouTianYa" +
                     "KanYiKanShiJieDeFanHua" +
                     "NianShaoDeXinZongYouXieQingKuang" +
-                    "RuJinWoSiHaiWeiJia"
-            ;
+                    "RuJinWoSiHaiWeiJia";
 
     @Override
     public String build(Map<String, Object> body, String extraSk) {
@@ -87,16 +86,16 @@ public class JwtServiceImpl implements JwtService {
     }
 
     static Map<String, Object> innerParse(String secret, String jwtStr) {
-        final Jws<Claims> claimsJws = Jwts.parserBuilder()
-                .setSigningKey(genSecretKey(secret))
+        final Jws<Claims> claimsJws = Jwts.parser()
+                .verifyWith(genSecretKey(secret))
                 .build()
-                .parseClaimsJws(jwtStr);
+                .parseSignedClaims(jwtStr);
         Map<String, Object> ret = Maps.newHashMap();
-        ret.putAll(claimsJws.getBody());
+        ret.putAll(claimsJws.getPayload());
         return ret;
     }
 
-    private static Key genSecretKey(String secret) {
+    private static SecretKey genSecretKey(String secret) {
         byte[] keyBytes = Decoders.BASE64.decode(BASE_SECURITY.concat(secret));
         return Keys.hmacShaKeyFor(keyBytes);
     }

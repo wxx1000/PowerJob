@@ -2,6 +2,7 @@ package tech.powerjob.server.web.service.impl;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import jakarta.annotation.Resource;
 import lombok.SneakyThrows;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +22,6 @@ import tech.powerjob.server.web.request.ChangePasswordRequest;
 import tech.powerjob.server.web.request.ModifyUserInfoRequest;
 import tech.powerjob.server.web.service.PwjbUserWebService;
 
-import javax.annotation.Resource;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;

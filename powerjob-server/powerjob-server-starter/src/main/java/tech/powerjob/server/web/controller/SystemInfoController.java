@@ -6,14 +6,15 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tech.powerjob.common.OmsConstant;
 import tech.powerjob.common.enums.InstanceStatus;
+import tech.powerjob.common.enums.SwitchableStatus;
 import tech.powerjob.common.response.ResultDTO;
 import tech.powerjob.server.auth.Permission;
 import tech.powerjob.server.auth.RoleScope;
 import tech.powerjob.server.auth.interceptor.ApiPermission;
-import tech.powerjob.common.enums.SwitchableStatus;
 import tech.powerjob.server.common.module.WorkerInfo;
 import tech.powerjob.server.persistence.remote.model.AppInfoDO;
 import tech.powerjob.server.persistence.remote.repository.AppInfoRepository;
@@ -54,7 +55,7 @@ public class SystemInfoController {
 
     @GetMapping("/listWorker")
     @ApiPermission(name = "System-ListWorker", roleScope = RoleScope.APP, requiredPermission = Permission.READ)
-    public ResultDTO<List<WorkerStatusVO>> listWorker(Long appId) {
+    public ResultDTO<List<WorkerStatusVO>> listWorker(@RequestParam("appId") Long appId) {
 
         List<WorkerInfo> workerInfos = workerClusterQueryService.getAllWorkers(appId);
         return ResultDTO.success(workerInfos.stream().map(WorkerStatusVO::new).collect(Collectors.toList()));
@@ -62,7 +63,7 @@ public class SystemInfoController {
 
     @GetMapping("/overview")
     @ApiPermission(name = "System-Overview", roleScope = RoleScope.APP, requiredPermission = Permission.READ)
-    public ResultDTO<SystemOverviewVO> getSystemOverview(Long appId) {
+    public ResultDTO<SystemOverviewVO> getSystemOverview(@RequestParam("appId") Long appId) {
 
         SystemOverviewVO overview = new SystemOverviewVO();
 

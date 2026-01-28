@@ -1,9 +1,8 @@
 package tech.powerjob.server.persistence.remote.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -26,7 +25,6 @@ public class UserInfoDO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
     private Long id;
 
     /**

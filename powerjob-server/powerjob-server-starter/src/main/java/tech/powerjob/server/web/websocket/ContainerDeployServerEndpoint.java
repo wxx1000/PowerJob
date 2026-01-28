@@ -1,15 +1,18 @@
 package tech.powerjob.server.web.websocket;
 
-import tech.powerjob.server.config.OmsEndpointConfigure;
-import tech.powerjob.server.core.container.ContainerService;
+import jakarta.annotation.Resource;
+import jakarta.websocket.OnError;
+import jakarta.websocket.OnOpen;
+import jakarta.websocket.RemoteEndpoint;
+import jakarta.websocket.Session;
+import jakarta.websocket.server.PathParam;
+import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Component;
+import tech.powerjob.server.config.OmsEndpointConfigure;
+import tech.powerjob.server.core.container.ContainerService;
 
-import javax.annotation.Resource;
-import javax.websocket.*;
-import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 
 /**
@@ -34,7 +37,7 @@ public class ContainerDeployServerEndpoint {
         remote.sendText("SYSTEM: connected successfully, start to deploy container: " + id);
         try {
             containerService.deploy(id, session);
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error("[ContainerDeployServerEndpoint] deploy container {} failed.", id, e);
 
             remote.sendText("SYSTEM: deploy failed because of the exception");
@@ -42,7 +45,7 @@ public class ContainerDeployServerEndpoint {
         }
         try {
             session.close();
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error("[ContainerDeployServerEndpoint] close session for {} failed.", id, e);
         }
     }

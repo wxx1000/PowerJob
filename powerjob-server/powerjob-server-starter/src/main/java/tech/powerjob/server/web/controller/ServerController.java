@@ -45,14 +45,14 @@ public class ServerController implements ServerInfoAware {
     private final WorkerClusterQueryService workerClusterQueryService;
 
     @GetMapping("/assert")
-    public ResultDTO<Long> assertAppName(String appName) {
+    public ResultDTO<Long> assertAppName(@RequestParam("appName") String appName) {
         Optional<AppInfoDO> appInfoOpt = appInfoRepository.findByAppName(appName);
         return appInfoOpt.map(appInfoDO -> ResultDTO.success(appInfoDO.getId())).
                 orElseGet(() -> ResultDTO.failed(String.format("app(%s) is not registered! Please register the app in oms-console first.", appName)));
     }
 
     @GetMapping("/assertV2")
-    public ResultDTO<WorkerAppInfo> assertAppNameV2(String appName) {
+    public ResultDTO<WorkerAppInfo> assertAppNameV2(@RequestParam("appName") String appName) {
         Optional<AppInfoDO> appInfoOpt = appInfoRepository.findByAppName(appName);
         return appInfoOpt.map(appInfoDO -> {
                     WorkerAppInfo workerAppInfo = new WorkerAppInfo().setAppId(appInfoDO.getId());
@@ -62,12 +62,12 @@ public class ServerController implements ServerInfoAware {
     }
 
     @GetMapping("/acquire")
-    public ResultDTO<String> acquireServer(ServerDiscoveryRequest request) {
+    public ResultDTO<String> acquireServer(@RequestParam ServerDiscoveryRequest request) {
         return ResultDTO.success(serverElectionService.elect(request));
     }
 
     @GetMapping("/checkConnectivity")
-    public ResultDTO<Boolean> checkConnectivity(String targetIp, Integer targetPort) {
+    public ResultDTO<Boolean> checkConnectivity(@RequestParam("targetIp") String targetIp, @RequestParam("targetPort") Integer targetPort) {
         try {
             boolean ret = PingPongUtils.checkConnectivity(targetIp, targetPort);
             return ResultDTO.success(ret);

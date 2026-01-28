@@ -1,5 +1,7 @@
 package tech.powerjob.server.web.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -25,8 +27,6 @@ import tech.powerjob.server.web.request.GenerateContainerTemplateRequest;
 import tech.powerjob.server.web.request.SaveContainerInfoRequest;
 import tech.powerjob.server.web.response.ContainerInfoVO;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -58,7 +58,8 @@ public class ContainerController {
     /**
      * 暴露给 worker 的下载端口，制品本身 version 不可枚举，不单独鉴权
      * 如果对此有安全性需求，可自行实现加密鉴权逻辑，或者干脆走自己的下载通道下载制品
-     * @param version 容器版本
+     *
+     * @param version  容器版本
      * @param response 响应
      * @throws IOException 异常
      */
@@ -139,7 +140,7 @@ public class ContainerController {
         BeanUtils.copyProperties(containerInfoDO, vo);
         if (containerInfoDO.getLastDeployTime() == null) {
             vo.setLastDeployTime("N/A");
-        }else {
+        } else {
             vo.setLastDeployTime(DateFormatUtils.format(containerInfoDO.getLastDeployTime(), OmsConstant.TIME_PATTERN));
         }
         SwitchableStatus status = SwitchableStatus.of(containerInfoDO.getStatus());

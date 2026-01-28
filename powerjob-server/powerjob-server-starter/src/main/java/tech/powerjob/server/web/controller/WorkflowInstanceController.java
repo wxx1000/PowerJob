@@ -1,5 +1,7 @@
 package tech.powerjob.server.web.controller;
 
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Example;
@@ -21,8 +23,6 @@ import tech.powerjob.server.persistence.remote.repository.WorkflowInstanceInfoRe
 import tech.powerjob.server.web.request.QueryWorkflowInstanceRequest;
 import tech.powerjob.server.web.response.WorkflowInstanceInfoVO;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.stream.Collectors;
 
 /**

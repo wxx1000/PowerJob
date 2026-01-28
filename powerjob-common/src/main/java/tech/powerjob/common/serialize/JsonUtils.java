@@ -1,16 +1,15 @@
 package tech.powerjob.common.serialize;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import tech.powerjob.common.exception.ImpossibleException;
 import tech.powerjob.common.exception.PowerJobException;
+import tools.jackson.core.StreamReadFeature;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.MapperFeature;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -27,25 +26,14 @@ public class JsonUtils {
 
     private static final JsonMapper JSON_MAPPER = JsonMapper.builder()
             .configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true)
-            .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
-            .configure(JsonParser.Feature.IGNORE_UNDEFINED, true)
+            .configure(StreamReadFeature.IGNORE_UNDEFINED, true)
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .build();
 
-    static {
-        JSON_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    private static final TypeReference<Map<String, Object>> MAP_TYPE_REFERENCE = new TypeReference<Map<String, Object>>() {
+    };
 
-        // 非核心功能可降级，尽可能降低依赖冲突概率
-        try {
-            JSON_MAPPER.registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule());
-        } catch (Exception e) {
-            log.warn("[JsonUtils] registerJavaTimeModule failed, PowerJob can't process Java 8 date/time type now!", e);
-        }
-    }
-
-    private static final TypeReference<Map<String, Object>>  MAP_TYPE_REFERENCE  = new TypeReference<Map<String, Object>> () {};
-
-    private JsonUtils(){
+    private JsonUtils() {
 
     }
 
@@ -58,7 +46,7 @@ public class JsonUtils {
         }
         try {
             return JSON_MAPPER.writeValueAsString(obj);
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error("[PowerJob] toJSONString failed", e);
         }
         return null;
@@ -70,7 +58,7 @@ public class JsonUtils {
         }
         try {
             return JSON_MAPPER.writeValueAsString(obj);
-        }catch (Exception e) {
+        } catch (Exception e) {
             ExceptionUtils.rethrow(e);
         }
         throw new ImpossibleException();
@@ -79,7 +67,7 @@ public class JsonUtils {
     public static byte[] toBytes(Object obj) {
         try {
             return JSON_MAPPER.writeValueAsBytes(obj);
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error("[PowerJob] serialize failed", e);
         }
         return null;
@@ -119,8 +107,8 @@ public class JsonUtils {
         }
         try {
             return JSON_MAPPER.readValue(json, clz);
-        }catch (Exception e) {
-            log.error("unable to parse json string to object,current string:{}",json,e);
+        } catch (Exception e) {
+            log.error("unable to parse json string to object,current string:{}", json, e);
             return null;
         }
 
@@ -132,7 +120,7 @@ public class JsonUtils {
         }
         try {
             return JSON_MAPPER.readValue(json, clz);
-        }catch (Exception e) {
+        } catch (Exception e) {
             ExceptionUtils.rethrow(e);
         }
         throw new PowerJobException("impossible");

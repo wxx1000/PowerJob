@@ -1,9 +1,8 @@
 package tech.powerjob.server.openapi.security;
 
+import jakarta.servlet.http.HttpServletRequest;
 import tech.powerjob.client.module.AppAuthRequest;
 import tech.powerjob.client.module.AppAuthResult;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * OPENAPI 安全服务
@@ -15,6 +14,7 @@ public interface OpenApiSecurityService {
 
     /**
      * APP 纬度请求的鉴权 & 验证
+     *
      * @param appAuthRequest 请求参数
      * @return token
      */
@@ -22,6 +22,7 @@ public interface OpenApiSecurityService {
 
     /**
      * APP 纬度请求的鉴权 & 验证
+     *
      * @param httpServletRequest http 原始请求
      */
     void authAppByToken(HttpServletRequest httpServletRequest);

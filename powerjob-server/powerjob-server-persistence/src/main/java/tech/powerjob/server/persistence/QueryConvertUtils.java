@@ -2,6 +2,7 @@ package tech.powerjob.server.persistence;
 
 import com.alibaba.fastjson.JSONArray;
 import com.google.common.collect.Lists;
+import jakarta.persistence.criteria.Predicate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
@@ -12,7 +13,6 @@ import tech.powerjob.common.PowerQuery;
 import tech.powerjob.common.exception.PowerJobException;
 import tech.powerjob.common.request.query.PowerPageQuery;
 
-import javax.persistence.criteria.Predicate;
 import java.lang.reflect.Field;
 import java.util.List;
 
@@ -53,16 +53,16 @@ public class QueryConvertUtils {
                         predicates.add(cb.notLike(root.get(colName), convertLikeParams(fieldValue)));
                     } else if (fieldName.endsWith(PowerQuery.LESS_THAN)) {
                         String colName = StringUtils.substringBeforeLast(fieldName, PowerQuery.LESS_THAN);
-                        predicates.add(cb.lessThan(root.get(colName), (Comparable)fieldValue));
+                        predicates.add(cb.lessThan(root.get(colName), (Comparable) fieldValue));
                     } else if (fieldName.endsWith(PowerQuery.GREATER_THAN)) {
                         String colName = StringUtils.substringBeforeLast(fieldName, PowerQuery.GREATER_THAN);
-                        predicates.add(cb.greaterThan(root.get(colName), (Comparable)fieldValue));
+                        predicates.add(cb.greaterThan(root.get(colName), (Comparable) fieldValue));
                     } else if (fieldName.endsWith(PowerQuery.LESS_THAN_EQUAL)) {
                         String colName = StringUtils.substringBeforeLast(fieldName, PowerQuery.LESS_THAN_EQUAL);
-                        predicates.add(cb.lessThanOrEqualTo(root.get(colName), (Comparable)fieldValue));
+                        predicates.add(cb.lessThanOrEqualTo(root.get(colName), (Comparable) fieldValue));
                     } else if (fieldName.endsWith(PowerQuery.GREATER_THAN_EQUAL)) {
                         String colName = StringUtils.substringBeforeLast(fieldName, PowerQuery.GREATER_THAN_EQUAL);
-                        predicates.add(cb.greaterThanOrEqualTo(root.get(colName), (Comparable)fieldValue));
+                        predicates.add(cb.greaterThanOrEqualTo(root.get(colName), (Comparable) fieldValue));
                     } else if (fieldName.endsWith(PowerQuery.IN)) {
                         String colName = StringUtils.substringBeforeLast(fieldName, PowerQuery.IN);
                         predicates.add(root.get(colName).in(convertInParams(fieldValue)));
